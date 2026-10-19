@@ -3,689 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Persona Backup Vault</title>
+    <title>AI Persona Vault - 캐릭터 백업 센터</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & Noto Sans KR -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        dark: {
-                            950: '#06080d',
-                            900: '#0b0f17',
-                            800: '#111827',
-                            700: '#1f293d',
-                            600: '#2d3748',
+                        slate: {
+                            850: '#151c2c',
+                            900: '#0b0f19',
+                            950: '#05070c',
                         },
-                        cobalt: {
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                        },
-                        cyanGlow: '#00d2ff',
-                    },
-                    fontFamily: {
-                        'sans': ['Inter', 'Noto Sans KR', 'sans-serif'],
-                        'mono': ['Fira Code', 'monospace'],
+                        accent: {
+                            blue: '#2563eb',
+                            cyan: '#38bdf8',
+                        }
                     }
                 }
             }
         }
     </script>
-
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Inter', 'Noto Sans KR', sans-serif;
-            background-color: #0b0f17;
-            color: #f8fafc;
-        }
-
-        /* Glassmorphism & Neon Glow Cards */
-        .vault-card {
-            background: linear-gradient(145deg, rgba(17, 24, 39, 0.9) 0%, rgba(11, 15, 23, 0.95) 100%);
-            border: 1px solid rgba(59, 130, 246, 0.18);
-            border-radius: 16px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .vault-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(96, 165, 250, 0.5);
-            box-shadow: 0 8px 25px -5px rgba(37, 99, 235, 0.25), 0 0 10px rgba(0, 210, 255, 0.15);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 7px;
-            height: 7px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0b0f17;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1f293d;
-            border-radius: 4px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
-
-        /* Subtle Glow Text */
-        .text-glow {
-            text-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Pretendard', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #0b0f19; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
     </style>
 </head>
-<body class="min-h-screen pb-16 antialiased selection:bg-cobalt-600 selection:text-white">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white custom-scrollbar">
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-6 right-6 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 bg-dark-800 border border-cobalt-500/40 text-slate-100 rounded-xl px-5 py-3.5 shadow-2xl flex items-center space-x-3 text-sm font-medium backdrop-blur-md">
-        <span id="toast-icon" class="text-cyanGlow text-lg"><i class="fa-solid fa-circle-check"></i></span>
-        <span id="toast-message">클립보드에 복사되었습니다.</span>
-    </div>
-
-    <!-- Main Wrapper -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-
-        <!-- Header / Navigation Bar -->
-        <header class="vault-card p-6 md:p-8 mb-8 relative overflow-hidden backdrop-blur-xl">
-            <!-- Top Gradient Accent Line -->
-            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-600"></div>
-
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-5 pb-6 border-b border-dark-700/60">
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fa-solid fa-brain text-white text-lg"></i>
+                </div>
                 <div>
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-semibold bg-cobalt-950/80 text-cobalt-400 border border-cobalt-500/30 mb-2.5">
-                        <span class="w-2 h-2 rounded-full bg-cyanGlow animate-pulse"></span>
-                        SYSTEM ARCHIVE // LOCAL SECURE VAULT
-                    </div>
-                    <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-white flex items-center gap-3">
-                        <i class="fa-solid fa-box-archive text-cobalt-500 text-glow"></i>
-                        <span>AI Persona Backup Vault</span>
+                    <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
+                        Persona Vault <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-cyan-400 border border-blue-500/20">Backup v2.2</span>
                     </h1>
-                    <p class="text-xs md:text-sm text-slate-400 mt-1.5">
-                        대화형 AI 프롬프트와 페르소나 설정을 검은색과 파란색의 고성능 디지털 아카이브에 안전하게 백업하세요.
-                    </p>
-                </div>
-
-                <!-- Control Buttons -->
-                <div class="flex flex-wrap items-center gap-2.5">
-                    <button onclick="openAddModal()" class="px-4 py-2.5 bg-cobalt-600 hover:bg-cobalt-500 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 shadow-lg shadow-cobalt-600/30">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span>+ New Persona</span>
-                    </button>
-
-                    <button onclick="exportBackup()" class="px-4 py-2.5 bg-dark-700 hover:bg-dark-600 text-slate-200 border border-dark-600 hover:border-cobalt-500/40 rounded-xl text-sm font-medium transition flex items-center gap-2">
-                        <i class="fa-solid fa-download text-xs text-cobalt-400"></i>
-                        <span>JSON 백업</span>
-                    </button>
-
-                    <label class="px-4 py-2.5 bg-dark-700 hover:bg-dark-600 text-slate-200 border border-dark-600 hover:border-cobalt-500/40 rounded-xl text-sm font-medium transition flex items-center gap-2 cursor-pointer">
-                        <i class="fa-solid fa-upload text-xs text-cobalt-400"></i>
-                        <span>복원</span>
-                        <input type="file" id="importFileInput" accept=".json" onchange="importBackup(event)" class="hidden">
-                    </label>
+                    <p class="text-xs text-slate-400">AI 캐릭터 및 프롬프트 안전 백업 아카이브</p>
                 </div>
             </div>
-
-            <!-- Search & Filter Area -->
-            <div class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-                <!-- Search Input Box -->
-                <div class="relative w-full md:w-96">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" id="searchInput" oninput="renderPersonas()" placeholder="캐릭터 이름, 태그, 프롬프트 실시간 검색..." 
-                           class="w-full pl-10 pr-4 py-2.5 text-xs md:text-sm rounded-xl border border-dark-700 bg-dark-900/90 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 transition">
-                </div>
-
-                <!-- Dynamic Tag/Category Filter -->
-                <div class="flex flex-wrap gap-1.5 w-full md:w-auto items-center" id="tagFilterContainer">
-                    <!-- Category tags dynamically inserted -->
-                </div>
-            </div>
-        </header>
-
-        <!-- Persona Cards Grid Layout -->
-        <main>
-            <div id="personaGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Persona cards injected dynamically via JS -->
-            </div>
-
-            <!-- Empty State -->
-            <div id="emptyState" class="hidden text-center py-20 vault-card my-8">
-                <div class="w-14 h-14 bg-cobalt-950 text-cobalt-400 border border-cobalt-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-xl shadow-inner">
-                    <i class="fa-solid fa-folder-open"></i>
-                </div>
-                <h3 class="text-base font-bold text-slate-200">저장된 AI 페르소나가 없습니다</h3>
-                <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">새로운 페르소나 캐릭터를 등록하거나 백업한 JSON 파일을 업로드하여 복원하세요.</p>
-                <button onclick="openAddModal()" class="mt-5 px-4 py-2 bg-cobalt-600 hover:bg-cobalt-500 text-white text-xs font-medium rounded-xl transition">
-                    + 첫 캐릭터 추가하기
+            
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition shadow-lg shadow-blue-600/20 active:scale-95">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="hidden sm:inline">새 캐릭터 등록</span>
                 </button>
-            </div>
-        </main>
-    </div>
-
-    <!-- VIEW & QUICK COPY MODAL -->
-    <div id="viewModal" class="fixed inset-0 bg-dark-950/80 backdrop-blur-md z-40 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-dark-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative my-8 border border-cobalt-500/30">
-            <!-- Close Button -->
-            <button onclick="closeModal('viewModal')" class="absolute top-5 right-5 w-8 h-8 text-slate-400 hover:text-white hover:bg-dark-800 rounded-lg text-sm flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <div id="viewModalContent">
-                <!-- Dynamic Content Injection -->
+                <button onclick="exportData()" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition border border-slate-700/50" title="모든 데이터 백업 (JSON)">
+                    <i class="fa-solid fa-download text-cyan-400"></i>
+                    <span class="hidden md:inline">백업(JSON)</span>
+                </button>
+                <label class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition border border-slate-700/50 cursor-pointer" title="백업 파일 복원">
+                    <i class="fa-solid fa-upload text-blue-400"></i>
+                    <span class="hidden md:inline">복원</span>
+                    <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
+                </label>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- ADD & EDIT MODAL -->
-    <div id="formModal" class="fixed inset-0 bg-dark-950/80 backdrop-blur-md z-40 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-dark-900 rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl relative my-8 border border-cobalt-500/30">
-            <button onclick="closeModal('formModal')" class="absolute top-5 right-5 w-8 h-8 text-slate-400 hover:text-white hover:bg-dark-800 rounded-lg text-sm flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-            <h2 id="formModalTitle" class="text-lg font-bold text-white mb-5 pb-3 border-b border-dark-700 flex items-center gap-2">
-                <i class="fa-solid fa-sliders text-cobalt-500"></i> 페르소나 정보 입력
-            </h2>
-
-            <form id="personaForm" onsubmit="savePersona(event)" class="space-y-4 text-xs md:text-sm">
-                <input type="hidden" id="personaId">
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block font-medium text-slate-300 mb-1">캐릭터 이름 *</label>
-                        <input type="text" id="formName" required placeholder="예: 코발트" 
-                               class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none">
-                    </div>
-                    <div>
-                        <label class="block font-medium text-slate-300 mb-1">카테고리 / 태그 분류 *</label>
-                        <input type="text" id="formCategory" required placeholder="예: 코딩/개발, 일상/대화, 판타지/RP" 
-                               class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">아바타 이모지 또는 이미지 URL (선택)</label>
-                    <input type="text" id="formAvatar" placeholder="이모지(💻) 또는 이미지 링크(https://...)" 
-                           class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">한 줄 설명 *</label>
-                    <input type="text" id="formSummary" required placeholder="캐릭터의 역할이나 핵심 특성을 짧게 요약하세요." 
-                           class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none">
-                </div>
-
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">시스템 프롬프트 (System Instruction) *</label>
-                    <textarea id="formPrompt" rows="5" required placeholder="AI의 역할, 지침, 페르소나 규정을 입력하세요." 
-                              class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none font-mono text-xs"></textarea>
-                </div>
-
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">첫 메시지 / 인사말 (First Message)</label>
-                    <textarea id="formGreeting" rows="3" placeholder="대화 시작 시 캐릭터가 전하는 대표 인사 대사" 
-                              class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none font-mono text-xs"></textarea>
-                </div>
-
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">세부 시나리오 / 세계관 메모 (선택)</label>
-                    <textarea id="formWorld" rows="2" placeholder="세계관 설정, 관계성 등 추가 참조 데이터" 
-                              class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none text-xs"></textarea>
-                </div>
-
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">태그 (쉼표 구분)</label>
-                    <input type="text" id="formTags" placeholder="도우미/코딩, 시스템, 다크" 
-                           class="w-full p-2.5 border border-dark-700 rounded-xl bg-dark-950 text-slate-100 focus:border-cobalt-500 focus:ring-1 focus:ring-cobalt-500 outline-none">
-                </div>
-
-                <div class="pt-4 flex justify-end gap-2 border-t border-dark-700">
-                    <button type="button" onclick="closeModal('formModal')" class="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-slate-300 rounded-xl font-medium transition">
-                        취소
-                    </button>
-                    <button type="submit" class="px-5 py-2 bg-cobalt-600 hover:bg-cobalt-500 text-white rounded-xl font-medium transition shadow-lg shadow-cobalt-600/30">
-                        저장하기
-                    </button>
-                </div>
-            </form>
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+        
+        <!-- Search & Filter Bar -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8 justify-between items-center">
+            <div class="relative w-full md:w-96">
+                <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+                <input type="text" id="searchInput" oninput="filterPersonas()" placeholder="캐릭터 이름, 태그, 설명 검색..." 
+                    class="w-full bg-slate-800/60 border border-slate-700/60 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+            </div>
+            
+            <div id="tagFilterContainer" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 custom-scrollbar">
+                <button onclick="filterByTag('all')" class="tag-btn px-4 py-2 rounded-xl text-xs font-medium bg-blue-600 text-white transition whitespace-nowrap shadow-sm" data-tag="all">전체보기</button>
+            </div>
         </div>
-    </div>
 
-    <!-- JavaScript Data & UI Logic -->
-    <script>
-        // High Quality Initial Korean Persona Datasets (Dark/Blue Theme fitting)
-        const SAMPLE_PERSONAS = [
-            {
-                id: 'persona_cobalt_01',
-                name: '코발트 (Cobalt)',
-                category: '#도우미/코딩',
-                avatar: '💻',
-                summary: '시니어 풀스택 엔지니어 및 시스템 아키텍트. 명확하고 완벽한 코드 솔루션을 제공하는 개발 파트너',
-                systemPrompt: `[System Instruction: Cobalt]
-- Role: Senior Full-Stack Software Engineer & Code Reviewer
-- Tone: 명확하고 신뢰감 있는 전문 기술 톤. 불필요한 서론 없이 즉시 실행 가능한 최적화 코드 제시.
-- Capabilities: Refactoring, Debugging, System Design, Modern UI/UX Architecture.
-- Rules:
-  1. 코드 작성 시 가독성과 주석을 철저히 포함할 것.
-  2. 예외 처리(Error Handling)를 필수적으로 고려할 것.`,
-                greeting: "시스템 연결 완료. 작성 중인 아키텍처나 코드 에러가 있다면 공유해주세요. 즉시 분석 후 최적의 구조를 제시해 드리겠습니다.",
-                world: "모던 다크 터미널 인프라 네트워크 환경",
-                tags: ['도우미/코딩', '개발', '아키텍트', '시니어'],
-                updatedAt: new Date().toISOString()
-            },
-            {
-                id: 'persona_luna_02',
-                name: '루나 (Luna)',
-                category: '#일상/대화',
-                avatar: '🌙',
-                summary: '고요한 밤에 감정과 생각을 편안하게 정리해 주는 세심하고 따뜻한 심리 상담가',
-                systemPrompt: `[Persona Profile: Luna]
-- Role: Nighttime Empathic Companion & Counselor
-- Mood: 차분하고 고요함, 따뜻한 경청자.
-- Speech: 부드럽고 다정한 존댓말, 상대방의 감정을 있는 그대로 존중함.
-- Directive: 해결책을 성급히 제시하기보다 사용자의 마음에 공감하고 생각을 정리할 수 있는 질문을 건네기.`,
-                greeting: "오늘 밤도 수고 많았어요. 가슴속에 맴돌던 고민이나 오늘 있었던 일들, 편하게 이야기해 줄래요?",
-                world: "별빛이 내리는 차분한 밤하늘과 심야의 서재",
-                tags: ['일상/대화', '힐링', '야간', '상담'],
-                updatedAt: new Date().toISOString()
-            },
-            {
-                id: 'persona_rien_03',
-                name: '리엔 (Rien)',
-                category: '#판타지/RP',
-                avatar: '📊',
-                summary: '데이터와 확률로 미래 전략을 입증하는 차가운 지성파 데이터 분석가 페르소나',
-                systemPrompt: `[Identity: Rien]
-- Role: Data Strategist & Business Analyst
-- Character Trait: 논리적, 데이터 기반 사고방식, 지적이고 예리함.
-- Interaction Pattern: 수치와 사실에 근거하여 논증함. 사용자의 아이디어에 대한 위험 요소와 기회 요소를 정밀 분석해줌.`,
-                greeting: "감정이나 막연한 직관보다는 정량적 데이터가 언제나 진실을 말해줍니다. 검증하려는 데이터 세트나 전략안을 보여주시죠.",
-                world: "글로벌 테크 타워의 고층 분석 센터",
-                tags: ['판타지/RP', '데이터', '전략', '분석가'],
-                updatedAt: new Date().toISOString()
-            }
-        ];
+        <!-- Persona Grid -->
+        <div id="personaGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Dynamically Rendered Cards -->
+        </div>
 
-        let personas = [];
-        let selectedCategory = 'ALL';
-
-        // Load Stored Personas or Initialize
-        window.addEventListener('DOMContentLoaded', () => {
-            const stored = localStorage.getItem('ai_personas_dark_vault');
-            if (stored) {
-                try {
-                    personas = JSON.parse(stored);
-                } catch(e) {
-                    personas = [...SAMPLE_PERSONAS];
-                }
-            } else {
-                personas = [...SAMPLE_PERSONAS];
-                saveToLocalStorage();
-            }
-            renderCategoryFilters();
-            renderPersonas();
-        });
-
-        // Local Storage Sync
-        function saveToLocalStorage() {
-            localStorage.setItem('ai_personas_dark_vault', JSON.stringify(personas));
-        }
-
-        // Render Category Tag Filters
-        function renderCategoryFilters() {
-            const container = document.getElementById('tagFilterContainer');
-            const categories = ['ALL', ...new Set(personas.map(p => p.category))];
-
-            container.innerHTML = categories.map(cat => {
-                const isActive = selectedCategory === cat;
-                const activeClass = isActive 
-                    ? 'bg-cobalt-600 text-white font-semibold shadow-md shadow-cobalt-600/30 border-cobalt-500' 
-                    : 'bg-dark-800 hover:bg-dark-700 text-slate-300 font-medium border-dark-700';
-                return `
-                    <button onclick="setCategory('${cat}')" 
-                            class="px-3 py-1.5 text-xs rounded-xl border transition duration-150 ${activeClass}">
-                        ${cat === 'ALL' ? '전체 보기' : cat}
-                    </button>
-                `;
-            }).join('');
-        }
-
-        function setCategory(cat) {
-            selectedCategory = cat;
-            renderCategoryFilters();
-            renderPersonas();
-        }
-
-        // Render Persona Cards
-        function renderPersonas() {
-            const grid = document.getElementById('personaGrid');
-            const emptyState = document.getElementById('emptyState');
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-
-            const filtered = personas.filter(p => {
-                const matchesCategory = selectedCategory === 'ALL' || p.category === selectedCategory;
-                const matchesSearch = p.name.toLowerCase().includes(searchQuery) || 
-                                      p.summary.toLowerCase().includes(searchQuery) ||
-                                      p.category.toLowerCase().includes(searchQuery) ||
-                                      (p.tags && p.tags.some(t => t.toLowerCase().includes(searchQuery)));
-                return matchesCategory && matchesSearch;
-            });
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            grid.innerHTML = filtered.map(p => {
-                const isUrlAvatar = p.avatar && (p.avatar.startsWith('http://') || p.avatar.startsWith('https://'));
-                const avatarDisplay = isUrlAvatar 
-                    ? `<img src="${p.avatar}" alt="${p.name}" class="w-12 h-12 rounded-xl object-cover border border-dark-600">`
-                    : `<div class="w-12 h-12 rounded-xl bg-dark-800 border border-cobalt-500/30 flex items-center justify-center text-2xl shadow-inner">${p.avatar || '🤖'}</div>`;
-
-                const tagBadges = (p.tags || []).map(t => 
-                    `<span class="bg-cobalt-950/80 text-cobalt-400 border border-cobalt-500/20 text-[10px] px-2 py-0.5 rounded-md">${t.startsWith('#') ? t : '#'+t}</span>`
-                ).join(' ');
-
-                return `
-                    <div class="vault-card p-5 flex flex-col justify-between h-full">
-                        <div>
-                            <!-- Header Info -->
-                            <div class="flex items-start gap-3 mb-3">
-                                ${avatarDisplay}
-                                <div class="overflow-hidden">
-                                    <span class="inline-block text-[10px] font-semibold text-cyanGlow bg-dark-800 border border-cyan-500/20 px-2 py-0.5 rounded-full mb-1">
-                                        ${p.category}
-                                    </span>
-                                    <h3 class="font-bold text-slate-100 text-base truncate">${p.name}</h3>
-                                </div>
-                            </div>
-
-                            <!-- Summary Description -->
-                            <p class="text-xs text-slate-400 leading-relaxed line-clamp-2 mb-3">
-                                ${p.summary}
-                            </p>
-
-                            <!-- Tags -->
-                            <div class="flex flex-wrap gap-1 mb-4">
-                                ${tagBadges}
-                            </div>
-                        </div>
-
-                        <!-- Actions -->
-                        <div class="pt-3 border-t border-dark-700/80 flex items-center justify-between gap-2 mt-auto">
-                            <button onclick="openViewModal('${p.id}')" 
-                                    class="bg-cobalt-600/20 hover:bg-cobalt-600 text-cobalt-300 hover:text-white border border-cobalt-500/30 text-xs px-3 py-2 rounded-xl flex-1 flex items-center justify-center gap-1.5 font-medium transition">
-                                <i class="fa-solid fa-code text-[11px]"></i> 상세보기 / 복사
-                            </button>
-                            <button onclick="openEditModal('${p.id}')" 
-                                    class="bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 text-xs px-2.5 py-2 rounded-xl transition" title="수정">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button onclick="deletePersona('${p.id}')" 
-                                    class="bg-dark-800 hover:bg-red-900/40 text-slate-400 hover:text-red-400 border border-dark-600 hover:border-red-500/40 text-xs px-2.5 py-2 rounded-xl transition" title="삭제">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Detailed View & Quick Copy Modal
-        function openViewModal(id) {
-            const p = personas.find(item => item.id === id);
-            if (!p) return;
-
-            const modalContent = document.getElementById('viewModalContent');
-            const isUrlAvatar = p.avatar && (p.avatar.startsWith('http://') || p.avatar.startsWith('https://'));
-            const avatarDisplay = isUrlAvatar 
-                ? `<img src="${p.avatar}" alt="${p.name}" class="w-14 h-14 rounded-2xl object-cover border border-cobalt-500/30">`
-                : `<div class="w-14 h-14 rounded-2xl bg-dark-800 border border-cobalt-500/30 flex items-center justify-center text-3xl shadow-inner">${p.avatar || '🤖'}</div>`;
-
-            modalContent.innerHTML = `
-                <div class="flex items-center gap-4 pb-4 border-b border-dark-700">
-                    ${avatarDisplay}
-                    <div>
-                        <span class="inline-block bg-cobalt-950 text-cyanGlow border border-cobalt-500/30 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-1">
-                            ${p.category}
-                        </span>
-                        <h2 class="text-xl font-bold text-white">${p.name}</h2>
-                    </div>
-                </div>
-
-                <div class="mt-5 space-y-4 text-xs">
-                    <!-- Summary -->
-                    <div class="bg-dark-950 p-3 rounded-xl border border-dark-700 text-slate-300">
-                        <span class="font-semibold text-cobalt-400">설명:</span> ${p.summary}
-                    </div>
-
-                    <!-- System Prompt Code Block -->
-                    <div>
-                        <div class="flex items-center justify-between mb-1.5">
-                            <label class="font-semibold text-slate-200 flex items-center gap-1.5">
-                                <i class="fa-solid fa-terminal text-cobalt-400"></i> 시스템 프롬프트 (System Instruction)
-                            </label>
-                            <button onclick="copyToClipboard(\`${escapeQuotes(p.systemPrompt)}\`, '시스템 프롬프트가 복사되었습니다.')" 
-                                    class="bg-cobalt-600 hover:bg-cobalt-500 text-white text-xs px-3 py-1 rounded-lg flex items-center gap-1 font-medium transition shadow-sm">
-                                <i class="fa-regular fa-copy"></i> 복사
-                            </button>
-                        </div>
-                        <pre class="bg-dark-950 text-cyan-200 p-4 rounded-xl font-mono text-xs whitespace-pre-wrap border border-dark-700 max-h-56 overflow-y-auto leading-relaxed">${p.systemPrompt}</pre>
-                    </div>
-
-                    <!-- First Message Block -->
-                    ${p.greeting ? `
-                    <div>
-                        <div class="flex items-center justify-between mb-1.5">
-                            <label class="font-semibold text-slate-200 flex items-center gap-1.5">
-                                <i class="fa-regular fa-comment-dots text-cobalt-400"></i> 첫 메시지 / 인사말 (Greeting)
-                            </label>
-                            <button onclick="copyToClipboard(\`${escapeQuotes(p.greeting)}\`, '첫 메시지가 복사되었습니다.')" 
-                                    class="bg-dark-800 hover:bg-dark-700 text-slate-200 border border-dark-600 text-xs px-3 py-1 rounded-lg flex items-center gap-1 transition">
-                                <i class="fa-regular fa-copy"></i> 복사
-                            </button>
-                        </div>
-                        <pre class="bg-dark-950 text-slate-300 p-3.5 rounded-xl font-mono text-xs whitespace-pre-wrap border border-dark-700 max-h-36 overflow-y-auto leading-relaxed">${p.greeting}</pre>
-                    </div>
-                    ` : ''}
-
-                    <!-- World View Notes -->
-                    ${p.world ? `
-                    <div>
-                        <label class="font-semibold text-slate-200 block mb-1">세부 시나리오 / 세계관 메모</label>
-                        <div class="bg-dark-950 p-3 rounded-xl border border-dark-700 text-slate-400 whitespace-pre-wrap">
-                            ${p.world}
-                        </div>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
-
-            document.getElementById('viewModal').classList.remove('hidden');
-        }
-
-        // Add & Edit Modal Logic
-        function openAddModal() {
-            document.getElementById('formModalTitle').innerHTML = '<i class="fa-solid fa-plus text-cobalt-500"></i> 신규 페르소나 등록';
-            document.getElementById('personaForm').reset();
-            document.getElementById('personaId').value = '';
-            document.getElementById('formModal').classList.remove('hidden');
-        }
-
-        function openEditModal(id) {
-            const p = personas.find(item => item.id === id);
-            if (!p) return;
-
-            document.getElementById('formModalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-cobalt-500"></i> 페르소나 수정';
-            document.getElementById('personaId').value = p.id;
-            document.getElementById('formName').value = p.name;
-            document.getElementById('formCategory').value = p.category;
-            document.getElementById('formAvatar').value = p.avatar || '';
-            document.getElementById('formSummary').value = p.summary;
-            document.getElementById('formPrompt').value = p.systemPrompt;
-            document.getElementById('formGreeting').value = p.greeting || '';
-            document.getElementById('formWorld').value = p.world || '';
-            document.getElementById('formTags').value = (p.tags || []).join(', ');
-
-            document.getElementById('formModal').classList.remove('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        // Save Form Input
-        function savePersona(e) {
-            e.preventDefault();
-
-            const id = document.getElementById('personaId').value;
-            const name = document.getElementById('formName').value.trim();
-            const category = document.getElementById('formCategory').value.trim();
-            const avatar = document.getElementById('formAvatar').value.trim();
-            const summary = document.getElementById('formSummary').value.trim();
-            const systemPrompt = document.getElementById('formPrompt').value.trim();
-            const greeting = document.getElementById('formGreeting').value.trim();
-            const world = document.getElementById('formWorld').value.trim();
-            const tagsInput = document.getElementById('formTags').value.trim();
-
-            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(Boolean) : [];
-
-            if (id) {
-                const index = personas.findIndex(p => p.id === id);
-                if (index !== -1) {
-                    personas[index] = {
-                        ...personas[index],
-                        name, category, avatar, summary, systemPrompt, greeting, world, tags,
-                        updatedAt: new Date().toISOString()
-                    };
-                }
-            } else {
-                const newPersona = {
-                    id: 'persona_' + Date.now(),
-                    name, category, avatar: avatar || '🤖', summary, systemPrompt, greeting, world, tags,
-                    updatedAt: new Date().toISOString()
-                };
-                personas.unshift(newPersona);
-            }
-
-            saveToLocalStorage();
-            renderCategoryFilters();
-            renderPersonas();
-            closeModal('formModal');
-            showToast(id ? '페르소나 수정 사항이 저장되었습니다.' : '새 페르소나가 안전하게 백업되었습니다.');
-        }
-
-        // Delete Persona
-        function deletePersona(id) {
-            if (confirm('이 페르소나 데이터를 백업함에서 삭제하시겠습니까?')) {
-                personas = personas.filter(p => p.id !== id);
-                saveToLocalStorage();
-                renderCategoryFilters();
-                renderPersonas();
-                showToast('캐릭터가 백업함에서 삭제되었습니다.');
-            }
-        }
-
-        // Export JSON Backup
-        function exportBackup() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(personas, null, 2));
-            const downloadAnchor = document.createElement('a');
-            const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, "");
-            
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `persona_vault_backup_${dateStr}.json`);
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-
-            showToast('전체 페르소나 백업 JSON 파일이 다운로드되었습니다.');
-        }
-
-        // Import JSON Backup
-        function importBackup(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (Array.isArray(importedData)) {
-                        const action = confirm("기존 목록을 유지하고 병합하시겠습니까?\n[확인]: 데이터 병합 / [취소]: 기존 데이터 덮어쓰기");
-                        if (action) {
-                            importedData.forEach(item => {
-                                if (!personas.some(p => p.id === item.id)) {
-                                    personas.push(item);
-                                }
-                            });
-                        } else {
-                            personas = importedData;
-                        }
-                        saveToLocalStorage();
-                        renderCategoryFilters();
-                        renderPersonas();
-                        showToast('JSON 백업 파일 복원이 완료되었습니다.');
-                    } else {
-                        alert('올바른 백업 JSON 형식이 아닙니다.');
-                    }
-                } catch (err) {
-                    alert('파일을 불러오는 중 오류가 발생했습니다: ' + err.message);
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
-        }
-
-        // Clipboard Copy Utility
-        function copyToClipboard(text, message) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            
-            try {
-                document.execCommand('copy');
-                showToast(message || '클립보드에 복사되었습니다.');
-            } catch (err) {
-                console.error('Copy failed', err);
-            }
-            document.body.removeChild(textarea);
-        }
-
-        function escapeQuotes(str) {
-            if (!str) return '';
-            return str.replace(/`/g, '\\`').replace(/\$/g, '\\$');
-        }
-
-        // Toast Helper
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            toastMsg.innerText = msg;
-
-            toast.classList.remove('translate-y-[-100px]', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-[-100px]', 'opacity-0');
-            }, 2400);
-        }
-    </script>
-</body>
-</html>
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+            <div class="w-20 h-20 rounded-2xl bg-slate-800/50 border border-slate-700 flex items-center justify-center text-slate-600 text-3xl mb-4">
+                <i class="fa-solid fa-ghost"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-slate-300 mb-1">저장된 캐릭터가 없습니다</h3>
+            <p class="text-sm text-slate-500 mb-6">새로운 AI 페르소나를 등록하거나 JSON 백업 파일을 불러와보세요.</p>
+            <button onclick="openAddModal()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition">
+                첫 페
