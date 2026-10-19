@@ -16,10 +16,6 @@
                             850: '#151c2c',
                             900: '#0b0f19',
                             950: '#05070c',
-                        },
-                        accent: {
-                            blue: '#2563eb',
-                            cyan: '#38bdf8',
                         }
                     }
                 }
@@ -48,25 +44,25 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
-                        Persona Vault <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-cyan-400 border border-blue-500/20">Backup v2.2</span>
+                        Persona Vault <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/10 text-cyan-400 border border-blue-500/20">v2.2</span>
                     </h1>
-                    <p class="text-xs text-slate-400">AI 캐릭터 및 프롬프트 안전 백업 아카이브</p>
+                    <p class="text-xs text-slate-400">AI 캐릭터 & 프롬프트 아카이브</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition shadow-lg shadow-blue-600/20 active:scale-95">
+                <button type="button" id="addBtn" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition shadow-lg shadow-blue-600/20 active:scale-95">
                     <i class="fa-solid fa-plus"></i>
                     <span class="hidden sm:inline">새 캐릭터 등록</span>
                 </button>
-                <button onclick="exportData()" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition border border-slate-700/50" title="모든 데이터 백업 (JSON)">
+                <button type="button" id="exportBtn" class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition border border-slate-700/50">
                     <i class="fa-solid fa-download text-cyan-400"></i>
                     <span class="hidden md:inline">백업(JSON)</span>
                 </button>
-                <label class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition border border-slate-700/50 cursor-pointer" title="백업 파일 복원">
+                <label class="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-sm transition border border-slate-700/50 cursor-pointer">
                     <i class="fa-solid fa-upload text-blue-400"></i>
                     <span class="hidden md:inline">복원</span>
-                    <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
+                    <input type="file" id="importFile" accept=".json" class="hidden">
                 </label>
             </div>
         </div>
@@ -79,19 +75,15 @@
         <div class="flex flex-col md:flex-row gap-4 mb-8 justify-between items-center">
             <div class="relative w-full md:w-96">
                 <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
-                <input type="text" id="searchInput" oninput="filterPersonas()" placeholder="캐릭터 이름, 태그, 설명 검색..." 
+                <input type="text" id="searchInput" placeholder="캐릭터 이름, 태그, 설명 검색..." 
                     class="w-full bg-slate-800/60 border border-slate-700/60 rounded-xl pl-11 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
             </div>
             
-            <div id="tagFilterContainer" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 custom-scrollbar">
-                <button onclick="filterByTag('all')" class="tag-btn px-4 py-2 rounded-xl text-xs font-medium bg-blue-600 text-white transition whitespace-nowrap shadow-sm" data-tag="all">전체보기</button>
-            </div>
+            <div id="tagFilterContainer" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 custom-scrollbar"></div>
         </div>
 
         <!-- Persona Grid -->
-        <div id="personaGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Dynamically Rendered Cards -->
-        </div>
+        <div id="personaGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
 
         <!-- Empty State -->
         <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
@@ -99,6 +91,438 @@
                 <i class="fa-solid fa-ghost"></i>
             </div>
             <h3 class="text-lg font-semibold text-slate-300 mb-1">저장된 캐릭터가 없습니다</h3>
-            <p class="text-sm text-slate-500 mb-6">새로운 AI 페르소나를 등록하거나 JSON 백업 파일을 불러와보세요.</p>
-            <button onclick="openAddModal()" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition">
-                첫 페
+            <p class="text-sm text-slate-500 mb-6">새로운 AI 페르소나를 등록해보세요.</p>
+            <button type="button" id="emptyAddBtn" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition">
+                첫 페르소나 추가하기
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 mt-12 text-center text-xs text-slate-500">
+        <p>AI Persona Vault &copy; 2026. All rights reserved.</p>
+    </footer>
+
+    <!-- Detail View Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm hidden p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl my-8 transform transition-all">
+            <div class="relative h-64 sm:h-80 w-full bg-slate-950">
+                <img id="detailImage" src="" alt="Profile" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent"></div>
+                <button type="button" id="closeDetailBtn" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center backdrop-blur-md transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+                <div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                    <div>
+                        <div id="detailTags" class="flex flex-wrap gap-1.5 mb-2"></div>
+                        <h2 id="detailName" class="text-2xl sm:text-3xl font-bold text-white tracking-tight"></h2>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="button" id="detailEditBtn" class="px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 text-xs font-medium backdrop-blur-md transition border border-slate-700">
+                            <i class="fa-solid fa-pen mr-1.5"></i> 수정
+                        </button>
+                        <button type="button" id="detailDeleteBtn" class="px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-medium backdrop-blur-md transition border border-red-500/20">
+                            <i class="fa-solid fa-trash mr-1.5"></i> 삭제
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 sm:p-8 space-y-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                <div>
+                    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">캐릭터 설명</h4>
+                    <p id="detailDescription" class="text-sm text-slate-300 leading-relaxed bg-slate-950/50 p-4 rounded-2xl border border-slate-800"></p>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xs font-semibold text-blue-400 uppercase tracking-wider">캐릭터 프롬프트</h4>
+                        <button type="button" id="copyCharPromptBtn" class="text-xs text-slate-400 hover:text-cyan-400 transition flex items-center gap-1 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                            <i class="fa-regular fa-copy"></i> 복사
+                        </button>
+                    </div>
+                    <div id="detailCharPrompt" class="text-xs font-mono text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 whitespace-pre-wrap max-h-40 overflow-y-auto custom-scrollbar"></div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xs font-semibold text-cyan-400 uppercase tracking-wider">시스템 프롬프트</h4>
+                        <button type="button" id="copySysPromptBtn" class="text-xs text-slate-400 hover:text-cyan-400 transition flex items-center gap-1 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                            <i class="fa-regular fa-copy"></i> 복사
+                        </button>
+                    </div>
+                    <div id="detailSysPrompt" class="text-xs font-mono text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 whitespace-pre-wrap max-h-40 overflow-y-auto custom-scrollbar"></div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-xs font-semibold text-purple-400 uppercase tracking-wider">첫 메시지</h4>
+                        <button type="button" id="copyFirstMsgBtn" class="text-xs text-slate-400 hover:text-cyan-400 transition flex items-center gap-1 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
+                            <i class="fa-regular fa-copy"></i> 복사
+                        </button>
+                    </div>
+                    <div id="detailFirstMsg" class="text-xs font-mono text-slate-300 bg-slate-950 p-4 rounded-2xl border border-slate-800 whitespace-pre-wrap max-h-40 overflow-y-auto custom-scrollbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="personaModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm hidden p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl my-8">
+            <div class="px-6 py-5 border-b border-slate-800 flex justify-between items-center bg-slate-950">
+                <h3 id="modalTitle" class="font-bold text-lg text-white">새 페르소나 추가</h3>
+                <button type="button" id="closeAddModalBtn" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <form id="personaForm" class="p-6 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <input type="hidden" id="personaId">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">캐릭터 이름</label>
+                    <input type="text" id="name" required placeholder="예: 코발트 (Cobalt)" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">프로필 이미지 URL</label>
+                        <input type="url" id="image" required placeholder="https://..." 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">태그 (쉼표로 구분)</label>
+                        <input type="text" id="tags" placeholder="SF, 해커" 
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">캐릭터 간단 설명</label>
+                    <textarea id="description" rows="2" placeholder="성격이나 세계관 요약" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition custom-scrollbar"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-blue-400 mb-1.5">캐릭터 프롬프트</label>
+                    <textarea id="charPrompt" rows="3" placeholder="캐릭터 고유 설정 및 말투" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-blue-500 transition custom-scrollbar"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-cyan-400 mb-1.5">시스템 프롬프트</label>
+                    <textarea id="sysPrompt" rows="3" placeholder="AI 행동 규칙" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-blue-500 transition custom-scrollbar"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-purple-400 mb-1.5">첫 메시지</label>
+                    <textarea id="firstMsg" rows="3" placeholder="첫 인사말" 
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-blue-500 transition custom-scrollbar"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+                    <button type="button" id="cancelAddBtn" class="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-medium transition">취소</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition shadow-lg shadow-blue-600/20">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-2xl shadow-xl flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-cyan-400 text-lg"></i>
+        <span id="toastMessage" class="text-sm font-medium">알림</span>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        const STORAGE_KEY = 'ai_persona_vault_data_v3';
+        
+        let personas = [
+            {
+                id: '1',
+                name: '코발트 (Cobalt)',
+                image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop',
+                tags: ['SF', '해커', '시크'],
+                description: '사이버펑크 세계관의 천재 여성 해커. 냉철하지만 동료에게는 다정함.',
+                charPrompt: '[Character("Cobalt")\nAge(24)\nGender(Female)\nPersonality(Cold, Analytical)]',
+                sysPrompt: '당신은 사이버펑크 도시의 천재 해커 코발트입니다.',
+                firstMsg: '네트워크 연결 완료. 오늘 처리할 의뢰가 뭐야?'
+            },
+            {
+                id: '2',
+                name: '루나 (Luna)',
+                image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=800&auto=format&fit=crop',
+                tags: ['판타지', '엘프', '치유'],
+                description: '고대 도서관을 지키는 엘프 아크메이지. 따뜻한 지혜를 전해줌.',
+                charPrompt: '[Character("Luna")\nRace(High Elf)\nRole(Archmage)]',
+                sysPrompt: '당신은 도서관을 지키는 아크메이지 루나입니다.',
+                firstMsg: '어서오세요, 여행자여. 잠시 차 한 잔과 함께 편히 쉬어가세요.'
+            }
+        ];
+
+        let currentFilter = 'all';
+        let activeDetailId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { personas = JSON.parse(saved); } catch(e){}
+            }
+
+            // Event Listeners
+            document.getElementById('addBtn').addEventListener('click', openAddModal);
+            document.getElementById('emptyAddBtn').addEventListener('click', openAddModal);
+            document.getElementById('closeAddModalBtn').addEventListener('click', closeModal);
+            document.getElementById('cancelAddBtn').addEventListener('click', closeModal);
+            document.getElementById('closeDetailBtn').addEventListener('click', closeDetailModal);
+            
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            document.getElementById('importFile').addEventListener('change', importData);
+            
+            document.getElementById('personaForm').addEventListener('submit', savePersona);
+            document.getElementById('searchInput').addEventListener('input', renderPersonas);
+
+            document.getElementById('copyCharPromptBtn').addEventListener('click', () => copyContent('detailCharPrompt'));
+            document.getElementById('copySysPromptBtn').addEventListener('click', () => copyContent('detailSysPrompt'));
+            document.getElementById('copyFirstMsgBtn').addEventListener('click', () => copyContent('detailFirstMsg'));
+
+            document.getElementById('detailEditBtn').addEventListener('click', () => {
+                const id = activeDetailId;
+                closeDetailModal();
+                openEditModal(id);
+            });
+
+            document.getElementById('detailDeleteBtn').addEventListener('click', () => {
+                const id = activeDetailId;
+                closeDetailModal();
+                deletePersona(id);
+            });
+
+            renderTags();
+            renderPersonas();
+        });
+
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(personas));
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        function renderTags() {
+            const container = document.getElementById('tagFilterContainer');
+            const allTags = new Set();
+            personas.forEach(p => { if (p.tags) p.tags.forEach(t => allTags.add(t.trim())); });
+
+            let html = `<button type="button" onclick="filterByTag('all')" class="px-4 py-2 rounded-xl text-xs font-medium ${currentFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'} transition whitespace-nowrap">전체보기</button>`;
+            
+            allTags.forEach(tag => {
+                const isActive = currentFilter === tag;
+                html += `<button type="button" onclick="filterByTag('${tag}')" class="px-4 py-2 rounded-xl text-xs font-medium ${isActive ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'} transition whitespace-nowrap">${tag}</button>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function filterByTag(tag) {
+            currentFilter = tag;
+            renderTags();
+            renderPersonas();
+        }
+
+        function renderPersonas() {
+            const grid = document.getElementById('personaGrid');
+            const emptyState = document.getElementById('emptyState');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+
+            const filtered = personas.filter(p => {
+                const matchesTag = currentFilter === 'all' || (p.tags && p.tags.map(t => t.trim()).includes(currentFilter));
+                const matchesQuery = p.name.toLowerCase().includes(query) || 
+                                     p.description.toLowerCase().includes(query) || 
+                                     (p.tags && p.tags.some(t => t.toLowerCase().includes(query)));
+                return matchesTag && matchesQuery;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            }
+
+            emptyState.classList.remove('flex');
+            emptyState.classList.add('hidden');
+
+            let html = '';
+            filtered.forEach(p => {
+                const tagsHtml = p.tags ? p.tags.map(t => `<span class="px-2.5 py-1 rounded-lg bg-slate-800/80 backdrop-blur-md text-cyan-400 text-[11px] font-medium border border-slate-700/50">${t.trim()}</span>`).join('') : '';
+                
+                html += `
+                    <div onclick="openDetailModal('${p.id}')" class="group bg-slate-800/40 border border-slate-800 hover:border-blue-500/50 rounded-3xl overflow-hidden shadow-lg transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1">
+                        <div class="relative w-full aspect-[4/3] bg-slate-950 overflow-hidden">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
+                            <div class="absolute top-3 left-3 flex flex-wrap gap-1 max-w-[85%]">${tagsHtml}</div>
+                        </div>
+                        <div class="p-5 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-bold text-lg text-white group-hover:text-cyan-400 transition mb-1.5">${p.name}</h3>
+                                <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${p.description}</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-500">
+                                <span class="flex items-center gap-1 text-blue-400"><i class="fa-regular fa-eye"></i> 상세보기</span>
+                                <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400">클릭</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        function openDetailModal(id) {
+            const p = personas.find(item => item.id === id);
+            if (!p) return;
+            activeDetailId = id;
+
+            document.getElementById('detailImage').src = p.image;
+            document.getElementById('detailName').textContent = p.name;
+            document.getElementById('detailDescription').textContent = p.description;
+            document.getElementById('detailCharPrompt').textContent = p.charPrompt || '없음';
+            document.getElementById('detailSysPrompt').textContent = p.sysPrompt || '없음';
+            document.getElementById('detailFirstMsg').textContent = p.firstMsg || '없음';
+
+            const tagsContainer = document.getElementById('detailTags');
+            tagsContainer.innerHTML = p.tags ? p.tags.map(t => `<span class="px-2.5 py-1 rounded-lg bg-blue-600/30 text-cyan-300 text-xs font-medium">${t.trim()}</span>`).join('') : '';
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+            activeDetailId = null;
+        }
+
+        function copyContent(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('복사되었습니다!');
+            });
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '새 페르소나 추가';
+            document.getElementById('personaForm').reset();
+            document.getElementById('personaId').value = '';
+            document.getElementById('personaModal').classList.remove('hidden');
+        }
+
+        function openEditModal(id) {
+            const p = personas.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('modalTitle').textContent = '페르소나 수정';
+            document.getElementById('personaId').value = p.id;
+            document.getElementById('name').value = p.name;
+            document.getElementById('image').value = p.image;
+            document.getElementById('tags').value = p.tags ? p.tags.join(', ') : '';
+            document.getElementById('description').value = p.description;
+            document.getElementById('charPrompt').value = p.charPrompt || '';
+            document.getElementById('sysPrompt').value = p.sysPrompt || '';
+            document.getElementById('firstMsg').value = p.firstMsg || '';
+
+            document.getElementById('personaModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('personaModal').classList.add('hidden');
+        }
+
+        function savePersona(e) {
+            e.preventDefault();
+            const id = document.getElementById('personaId').value;
+            const name = document.getElementById('name').value.trim();
+            const image = document.getElementById('image').value.trim();
+            const tagsInput = document.getElementById('tags').value;
+            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()).filter(t => t) : [];
+            const description = document.getElementById('description').value.trim();
+            const charPrompt = document.getElementById('charPrompt').value.trim();
+            const sysPrompt = document.getElementById('sysPrompt').value.trim();
+            const firstMsg = document.getElementById('firstMsg').value.trim();
+
+            if (id) {
+                const index = personas.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    personas[index] = { id, name, image, tags, description, charPrompt, sysPrompt, firstMsg };
+                    showToast('수정되었습니다.');
+                }
+            } else {
+                personas.unshift({
+                    id: Date.now().toString(),
+                    name, image, tags, description, charPrompt, sysPrompt, firstMsg
+                });
+                showToast('새 캐릭터가 등록되었습니다.');
+            }
+
+            saveData();
+            renderTags();
+            renderPersonas();
+            closeModal();
+        }
+
+        function deletePersona(id) {
+            if (confirm('이 캐릭터를 삭제하시겠습니까?')) {
+                personas = personas.filter(item => item.id !== id);
+                saveData();
+                renderTags();
+                renderPersonas();
+                showToast('삭제되었습니다.');
+            }
+        }
+
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(personas, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `ai_personas_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('백업 파일이 다운로드되었습니다.');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported)) {
+                        personas = imported;
+                        saveData();
+                        renderTags();
+                        renderPersonas();
+                        showToast('성공적으로 불러왔습니다!');
+                    }
+                } catch (err) {
+                    alert('파일 오류');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+    </script>
+</body>
+</html>
